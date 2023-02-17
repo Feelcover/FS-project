@@ -5,6 +5,7 @@ import { registerValidation } from "./validations/auth.js";
 import UserSchema from "./models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import authMiddleware from "./utils/authMiddleware.js";
 
 mongoose
   .connect(
@@ -97,6 +98,25 @@ app.post("/auth/register", registerValidation, async (req, res) => {
     console.log(err);
     res.status(500).json({
       message: "Не удалось провести регистрацию",
+    });
+  }
+});
+
+app.get("/auth/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await UserSchema.findById(req.userId);
+
+    if (!user) {
+      return res.json({ message: "Пользователь не найден" });
+    }
+
+    const { passwordHash, ...UserData } = user._doc;
+
+    res.json(UserData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Пользователь не найден",
     });
   }
 });
