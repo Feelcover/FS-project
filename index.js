@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 import { registerValidation } from "./validations/auth.js";
 import UserSchema from "./models/User.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 mongoose
   .connect(
@@ -16,6 +16,50 @@ const app = express();
 
 app.use(express.json());
 
+//Получение запроса авторизации
+app.post("/auth/login", async (req, res) => {
+  try {
+    const user = await UserSchema.findOne({ email: req.body.email });
+
+    if (!user) {
+      return req.status(404).json({
+        message: "Неверный логин или пароль",
+      });
+    }
+    const password = await bcrypt.compare(
+      req.body.password,
+      user._doc.passwordHash
+    );
+    if (!password) {
+      return req.status(404).json({
+        message: "Неверный логин или пароль",
+      });
+    }
+    const { passwordHash, ...UserData } = user._doc;
+
+    const token = jwt.sign(
+      {
+        _id: user._id,
+      },
+      "secret",
+      {
+        expiresIn: "30d",
+      }
+    );
+
+    res.json({
+      ...UserData,
+      token,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Не удалось провести авторизацию",
+    });
+  }
+});
+
+//Получение запроса регистрации
 app.post("/auth/register", registerValidation, async (req, res) => {
   try {
     const error = validationResult(req);
@@ -34,18 +78,20 @@ app.post("/auth/register", registerValidation, async (req, res) => {
     });
 
     const user = await doc.save();
-    const {passwordHash, ...UserData} = user._doc
+    const { passwordHash, ...UserData } = user._doc;
     const token = jwt.sign(
       {
         _id: user._id,
-      }, "secret",
+      },
+      "secret",
       {
-        expiresIn:"30d",
+        expiresIn: "30d",
       }
-    )
+    );
 
     res.json({
-      ...UserData, token
+      ...UserData,
+      token,
     });
   } catch (err) {
     console.log(err);
