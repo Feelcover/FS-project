@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { registerValidation } from "./validations/auth.js";
+import { registerValidation, loginValidation } from "./validations.js";
 import authMiddleware from "./utils/authMiddleware.js";
 import { login, me, register } from "./controllers/UserController.js";
 
@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 
 //Обработка запроса авторизации
-app.post("/auth/login", login);
+app.post("/auth/login", loginValidation, login);
 //Обработка запроса регистрации
 app.post("/auth/register", registerValidation, register);
 //Обработка запроса данных пользователя
