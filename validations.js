@@ -11,3 +11,10 @@ export const loginValidation = [
   body("email", "Неверный формат почты").isEmail(),
   body("password", "Пароль должен быть длинной минимум 5 символов").isLength({ min: 5 }),
 ];
+
+export const postValidation = [
+  body("title", "Введите заголовок статьи").isLength({min:3}).isString(),
+  body("text", "Введите текст статьи").isLength({min:10}).isString(),
+  body("tags", "Ошибка формата тегов").optional().isString(),
+  body("imageUrl", "Неверная ссылка на изображение").optional().isString(),
+];
