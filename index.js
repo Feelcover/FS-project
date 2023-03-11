@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { registerValidation, loginValidation } from "./validations.js";
+import { registerValidation, loginValidation } from "./validations/validations.js";
 import authMiddleware from "./utils/authMiddleware.js";
 import { login, me, register } from "./controllers/UserController.js";
 
@@ -8,7 +8,7 @@ mongoose
   .connect(
     "mongodb+srv://pioneerbeat:Andrey@fs.h3wezc2.mongodb.net/blog?retryWrites=true&w=majority"
   )
-  .then(() => console.log("DB ok"))
+  .then(() => console.log("DB connected"))
   .catch((err) => console.log("DB error", err));
 const app = express();
 
@@ -25,5 +25,5 @@ app.listen(4444, (err) => {
   if (err) {
     return console.log(err);
   }
-  console.log("Ok");
+  console.log("Server started");
 });
