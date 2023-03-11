@@ -51,7 +51,7 @@ export const login = async (req, res) => {
       req.body.password,
       user._doc.passwordHash
     );
-    if (!user && !password) {
+    if (!user || !password) {
       return req.status(404).json({
         message: "Неверный логин или пароль",
       });
