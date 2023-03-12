@@ -1,8 +1,12 @@
 import express from "express";
 import mongoose from "mongoose";
-import { registerValidation, loginValidation } from "./validations/validations.js";
+import {
+  registerValidation,
+  loginValidation,
+} from "./validations/validations.js";
 import authMiddleware from "./utils/authMiddleware.js";
 import { login, me, register } from "./controllers/UserController.js";
+import { create } from "./controllers/PostController.js";
 
 mongoose
   .connect(
@@ -14,12 +18,30 @@ const app = express();
 
 app.use(express.json());
 
-//Обработка запроса авторизации
+// Запрос авторизации
 app.post("/auth/login", loginValidation, login);
-//Обработка запроса регистрации
+
+// Запрос регистрации
 app.post("/auth/register", registerValidation, register);
-//Обработка запроса данных пользователя
+
+// Запрос данных пользователя
 app.get("/auth/me", authMiddleware, me);
+
+// Создание статьи
+app.get("/posts", create);
+
+// // Получение всех статей
+// app.get("/posts", getAll);
+
+// // Получение статьи
+// app.get("/posts:id", getOne);
+
+// // Удаление статьи
+// app.get("/posts", remove);
+
+// // Обновление статьи
+// app.get("/posts", update);
+
 
 app.listen(4444, (err) => {
   if (err) {
