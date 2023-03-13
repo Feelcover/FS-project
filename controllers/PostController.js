@@ -1,16 +1,16 @@
-import PostSchema from "../models/Post";
+import PostSchema from "../models/Post.js";
 
 export const create = async (req, res) => {
   try {
     const doc = new PostSchema({
-      user: req.userId,
-      title: req.body.email,
-      text: req.body.title,
+      title: req.body.title,
+      text: req.body.text,
       tags: req.body.tags,
+      user: req.userId,
       imageUrl: req.body.imageUrl,
     });
     const post = await doc.save();
-    res.jspn(post);
+    res.json(post);
   } catch (err) {
     console.log(err);
     res.status(500).json({

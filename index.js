@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import {
   registerValidation,
   loginValidation,
+  postValidation
 } from "./validations/validations.js";
 import authMiddleware from "./utils/authMiddleware.js";
 import { login, me, register } from "./controllers/UserController.js";
@@ -14,6 +15,7 @@ mongoose
   )
   .then(() => console.log("DB connected"))
   .catch((err) => console.log("DB error", err));
+  
 const app = express();
 
 app.use(express.json());
@@ -28,7 +30,7 @@ app.post("/auth/register", registerValidation, register);
 app.get("/auth/me", authMiddleware, me);
 
 // Создание статьи
-app.get("/posts", create);
+app.post("/posts", authMiddleware, postValidation, create);
 
 // // Получение всех статей
 // app.get("/posts", getAll);
