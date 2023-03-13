@@ -20,28 +20,28 @@ const app = express();
 
 app.use(express.json());
 
-// Запрос авторизации
+// Выполнение авторизации
 app.post("/auth/login", loginValidation, login);
 
-// Запрос регистрации
+// Выполнение регистрации
 app.post("/auth/register", registerValidation, register);
 
 // Запрос данных пользователя
 app.get("/auth/me", authMiddleware, me);
 
-// Создание статьи
+// Выполнение создания статьи
 app.post("/posts", authMiddleware, postValidation, create);
 
-// Получение всех статей
+// Запрос всех статей
 app.get("/posts", getAll);
 
-// Получение статьи
+// Запрос статьи
 app.get("/posts/:id", getOne);
 
-// // Удаление статьи
+// // Выполнение удаления статьи
 // app.get("/posts", remove);
 
-// // Обновление статьи
+// // Запрос обновления статьи
 // app.get("/posts", update);
 
 
