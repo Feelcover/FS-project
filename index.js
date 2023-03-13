@@ -7,7 +7,7 @@ import {
 } from "./validations/validations.js";
 import authMiddleware from "./utils/authMiddleware.js";
 import { login, me, register } from "./controllers/UserController.js";
-import { create } from "./controllers/PostController.js";
+import { create, getAll, getOne } from "./controllers/PostController.js";
 
 mongoose
   .connect(
@@ -32,11 +32,11 @@ app.get("/auth/me", authMiddleware, me);
 // Создание статьи
 app.post("/posts", authMiddleware, postValidation, create);
 
-// // Получение всех статей
-// app.get("/posts", getAll);
+// Получение всех статей
+app.get("/posts", getAll);
 
-// // Получение статьи
-// app.get("/posts:id", getOne);
+// Получение статьи
+app.get("/posts/:id", getOne);
 
 // // Удаление статьи
 // app.get("/posts", remove);
