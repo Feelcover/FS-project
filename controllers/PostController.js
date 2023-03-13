@@ -1,8 +1,8 @@
-import Post from "../models/Post";
+import PostSchema from "../models/Post";
 
 export const create = async (req, res) => {
   try {
-    const doc = new UserSchema({
+    const doc = new PostSchema({
       user: req.userId,
       title: req.body.email,
       text: req.body.title,
