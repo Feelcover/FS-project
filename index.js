@@ -7,7 +7,7 @@ import {
 } from "./validations/validations.js";
 import authMiddleware from "./utils/authMiddleware.js";
 import { login, me, register } from "./controllers/UserController.js";
-import { create, getAll, getOne } from "./controllers/PostController.js";
+import { create, getAll, getOne, remove } from "./controllers/PostController.js";
 
 mongoose
   .connect(
@@ -38,8 +38,8 @@ app.get("/posts", getAll);
 // Запрос статьи
 app.get("/posts/:id", getOne);
 
-// // Выполнение удаления статьи
-// app.get("/posts", remove);
+// Выполнение удаления статьи
+app.delete("/posts/:id", authMiddleware, remove);
 
 // // Запрос обновления статьи
 // app.get("/posts", update);
