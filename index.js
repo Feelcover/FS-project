@@ -26,17 +26,21 @@ app.post("/auth/login", loginValidation, login);
 // Выполнение регистрации
 app.post("/auth/register", registerValidation, register);
 
-// Запрос данных пользователя
-app.get("/auth/me", authMiddleware, me);
-
-// Выполнение создания статьи
-app.post("/posts", authMiddleware, postValidation, create);
-
 // Запрос всех статей
 app.get("/posts", getAll);
 
 // Запрос статьи
 app.get("/posts/:id", getOne);
+
+
+
+//Запросы требующие токен/авторизацию
+
+// Запрос данных пользователя
+app.get("/auth/me", authMiddleware, me);
+
+// Выполнение создания статьи
+app.post("/posts", authMiddleware, postValidation, create);
 
 // Выполнение удаления статьи
 app.delete("/posts/:id", authMiddleware, remove);
