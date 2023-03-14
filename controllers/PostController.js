@@ -35,10 +35,10 @@ export const getAll = async (req, res) => {
 export const getOne = async (req, res) => {
   try {
     const postId = req.params.id;
-    PostSchema.findOneAndUpdate(
-      { _id: postId, },
-      { $inc: { viewCount: 1 }, },
-      { returnDocument: "after", },
+    await PostSchema.findOneAndUpdate(
+      { _id: postId },
+      { $inc: { viewCount: 1 } },
+      { returnDocument: "after" },
       (err, doc) => {
         if (err) {
           console.log(err);
@@ -63,32 +63,50 @@ export const getOne = async (req, res) => {
   }
 };
 
-
 export const remove = async (req, res) => {
-    try {
-      const postId = req.params.id;
-      PostSchema.findOneAndDelete(
-        { _id: postId, },
-        (err, doc) => {
-          if (err) {
-            console.log(err);
-            return res.status(500).json({
-              message: "Ошибка удаления статьи",
-            });
-          }
-  
-          if (!doc) {
-            return res.status(404).json({
-              message: "Статья не найдена",
-            });
-          }
-          res.json({success:true});
-        }
-      );
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({
-        message: "Не удалось удалить статью",
-      });
-    }
-  };
+  try {
+    const postId = req.params.id;
+    PostSchema.findOneAndDelete({ _id: postId }, (err, doc) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          message: "Ошибка удаления статьи",
+        });
+      }
+
+      if (!doc) {
+        return res.status(404).json({
+          message: "Статья не найдена",
+        });
+      }
+      res.json({ success: true });
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Не удалось удалить статью",
+    });
+  }
+};
+
+export const update = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    PostSchema.updateOne(
+      { _id: postId },
+      {
+        title: req.body.title,
+        text: req.body.text,
+        tags: req.body.tags,
+        user: req.userId,
+        imageUrl: req.body.imageUrl,
+      }
+    );
+    res.json({success:true})
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Не удалось обновить статью",
+    });
+  }
+};
