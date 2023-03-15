@@ -1,13 +1,21 @@
 import express from "express";
 import mongoose from "mongoose";
+import multer from "multer";
 import {
   registerValidation,
   loginValidation,
-  postValidation
+  postValidation,
 } from "./validations/validations.js";
 import authMiddleware from "./utils/authMiddleware.js";
 import { login, me, register } from "./controllers/UserController.js";
-import { create, getAll, getOne, remove, update } from "./controllers/PostController.js";
+import {
+  create,
+  getAll,
+  getOne,
+  remove,
+  update,
+  upload,
+} from "./controllers/PostController.js";
 
 mongoose
   .connect(
@@ -15,10 +23,23 @@ mongoose
   )
   .then(() => console.log("DB connected"))
   .catch((err) => console.log("DB error", err));
-  
+
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (_, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const uploader = multer({storage});
+
 const app = express();
 
 app.use(express.json());
+
+
 
 // Выполнение авторизации
 app.post("/auth/login", loginValidation, login);
@@ -34,7 +55,8 @@ app.get("/posts/:id", getOne);
 
 
 
-//Запросы требующие токен/авторизацию
+
+//Запросы требующие токен
 
 // Запрос данных пользователя
 app.get("/auth/me", authMiddleware, me);
@@ -48,7 +70,13 @@ app.delete("/posts/:id", authMiddleware, remove);
 // Запрос обновления статьи
 app.patch("/posts/:id", authMiddleware, update);
 
+// Запрос на выгрузку файла
+app.post("/upload", authMiddleware, uploader.single('image'), upload)
 
+
+
+
+// Проверка порта
 app.listen(4444, (err) => {
   if (err) {
     return console.log(err);

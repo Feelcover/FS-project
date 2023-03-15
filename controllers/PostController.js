@@ -110,3 +110,16 @@ export const update = async (req, res) => {
     });
   }
 };
+
+export const upload = (req, res) => {
+   try {
+    res.json({
+        url: `../upload/${req.file.originalname}`,
+    });
+   } catch (err) {
+    console.log(err);
+    res.status(500).json({
+        message: "Не удалось загрузить изображение",
+    });
+   }
+}
