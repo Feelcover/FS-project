@@ -7,6 +7,8 @@ import {
   postValidation,
 } from "./validations/validations.js";
 import authMiddleware from "./utils/authMiddleware.js";
+import validationMiddleware from "./utils/validationMiddleware.js";
+
 import { login, me, register } from "./controllers/UserController.js";
 import {
   create,
@@ -33,19 +35,18 @@ const storage = multer.diskStorage({
   },
 });
 
-const uploader = multer({storage});
+const uploader = multer({ storage });
 
 const app = express();
 
 app.use(express.json());
-
-
+app.use("/upload", express.static("uploads"));
 
 // Выполнение авторизации
-app.post("/auth/login", loginValidation, login);
+app.post("/auth/login", loginValidation, validationMiddleware, login);
 
 // Выполнение регистрации
-app.post("/auth/register", registerValidation, register);
+app.post("/auth/register", registerValidation, validationMiddleware, register);
 
 // Запрос всех статей
 app.get("/posts", getAll);
@@ -53,28 +54,28 @@ app.get("/posts", getAll);
 // Запрос статьи
 app.get("/posts/:id", getOne);
 
-
-
-
 //Запросы требующие токен
 
 // Запрос данных пользователя
 app.get("/auth/me", authMiddleware, me);
 
 // Выполнение создания статьи
-app.post("/posts", authMiddleware, postValidation, create);
+app.post(
+  "/posts",
+  authMiddleware,
+  postValidation,
+  validationMiddleware,
+  create
+);
 
 // Выполнение удаления статьи
 app.delete("/posts/:id", authMiddleware, remove);
 
 // Запрос обновления статьи
-app.patch("/posts/:id", authMiddleware, update);
+app.patch("/posts/:id", authMiddleware, validationMiddleware, update);
 
 // Запрос на выгрузку файла
-app.post("/upload", authMiddleware, uploader.single('image'), upload)
-
-
-
+app.post("/upload", authMiddleware, uploader.single("image"), upload);
 
 // Проверка порта
 app.listen(4444, (err) => {
