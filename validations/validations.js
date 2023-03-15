@@ -14,7 +14,7 @@ export const loginValidation = [
 
 export const postValidation = [
   body("title", "Введите заголовок статьи").isLength({min:3}).isString(),
-  body("text", "Введите текст статьи").isLength({min:10}).isString(),
-  body("tags", "Ошибка формата тегов").optional().isString(),
+  body("text", "Введите текст статьи, минимум 10 симоволов").isLength({min:10}).isString(),
+  body("tags", "Ошибка формата тегов").optional().isArray(),
   body("imageUrl", "Неверная ссылка на изображение").optional().isString(),
 ];

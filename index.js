@@ -1,23 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
-import {
-  registerValidation,
-  loginValidation,
-  postValidation,
-} from "./validations/validations.js";
 import authMiddleware from "./utils/authMiddleware.js";
 import validationMiddleware from "./utils/validationMiddleware.js";
+import { PostController, UserController } from "./controllers/index.js";
+import { validations } from "./validations/index.js"
 
-import { login, me, register } from "./controllers/UserController.js";
-import {
-  create,
-  getAll,
-  getOne,
-  remove,
-  update,
-  upload,
-} from "./controllers/PostController.js";
 
 mongoose
   .connect(
@@ -43,39 +31,39 @@ app.use(express.json());
 app.use("/upload", express.static("uploads"));
 
 // Выполнение авторизации
-app.post("/auth/login", loginValidation, validationMiddleware, login);
+app.post("/auth/login", validations.loginValidation, validationMiddleware, UserController.login);
 
 // Выполнение регистрации
-app.post("/auth/register", registerValidation, validationMiddleware, register);
+app.post("/auth/register", validations.registerValidation, validationMiddleware, UserController.register);
 
 // Запрос всех статей
-app.get("/posts", getAll);
+app.get("/posts", PostController.getAll);
 
 // Запрос статьи
-app.get("/posts/:id", getOne);
+app.get("/posts/:id", PostController.getOne);
 
 //Запросы требующие токен
 
 // Запрос данных пользователя
-app.get("/auth/me", authMiddleware, me);
+app.get("/auth/me", authMiddleware, UserController.me);
 
 // Выполнение создания статьи
 app.post(
   "/posts",
   authMiddleware,
-  postValidation,
+  validations.postValidation,
   validationMiddleware,
-  create
+  PostController.create
 );
 
 // Выполнение удаления статьи
-app.delete("/posts/:id", authMiddleware, remove);
+app.delete("/posts/:id", authMiddleware, PostController.remove);
 
 // Запрос обновления статьи
-app.patch("/posts/:id", authMiddleware, validationMiddleware, update);
+app.patch("/posts/:id", authMiddleware, validationMiddleware, PostController.update);
 
 // Запрос на выгрузку файла
-app.post("/upload", authMiddleware, uploader.single("image"), upload);
+app.post("/upload", authMiddleware, uploader.single("image"), PostController.upload);
 
 // Проверка порта
 app.listen(4444, (err) => {

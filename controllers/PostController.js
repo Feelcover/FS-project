@@ -63,7 +63,7 @@ export const getOne = async (req, res) => {
   }
 };
 
-export const remove = async (req, res) => {
+export const remove = (req, res) => {
   try {
     const postId = req.params.id;
     PostSchema.findOneAndDelete({ _id: postId }, (err, doc) => {
@@ -89,7 +89,7 @@ export const remove = async (req, res) => {
   }
 };
 
-export const update = async (req, res) => {
+export const update = (req, res) => {
   try {
     const postId = req.params.id;
     PostSchema.updateOne(
