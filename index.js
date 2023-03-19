@@ -5,6 +5,7 @@ import authMiddleware from "./utils/authMiddleware.js";
 import validationMiddleware from "./utils/validationMiddleware.js";
 import { PostController, UserController } from "./controllers/index.js";
 import { validations } from "./validations/index.js"
+import cors from "cors"
 
 
 mongoose
@@ -27,6 +28,7 @@ const uploader = multer({ storage });
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use("/upload", express.static("uploads"));
 
