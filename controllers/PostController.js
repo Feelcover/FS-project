@@ -32,10 +32,10 @@ export const getAll = async (req, res) => {
   }
 };
 
-export const getOne = async (req, res) => {
+export const getOne = (req, res) => {
   try {
     const postId = req.params.id;
-    await PostSchema.findOneAndUpdate(
+    PostSchema.findOneAndUpdate(
       { _id: postId },
       { $inc: { viewCount: 1 } },
       { returnDocument: "after" },
@@ -88,10 +88,10 @@ export const remove = (req, res) => {
     });
   }
 };
-
 export const update = (req, res) => {
   try {
     const postId = req.params.id;
+
     PostSchema.updateOne(
       { _id: postId },
       {
@@ -102,7 +102,8 @@ export const update = (req, res) => {
         imageUrl: req.body.imageUrl,
       }
     );
-    res.json({success:true})
+
+    res.json({ success: true });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -112,14 +113,14 @@ export const update = (req, res) => {
 };
 
 export const upload = (req, res) => {
-   try {
+  try {
     res.json({
-        url: `../upload/${req.file.originalname}`,
+      url: `../upload/${req.file.originalname}`,
     });
-   } catch (err) {
+  } catch (err) {
     console.log(err);
     res.status(500).json({
-        message: "Не удалось загрузить изображение",
+      message: "Не удалось загрузить изображение",
     });
-   }
-}
+  }
+};

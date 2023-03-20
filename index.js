@@ -62,7 +62,7 @@ app.post(
 app.delete("/posts/:id", authMiddleware, PostController.remove);
 
 // Запрос обновления статьи
-app.patch("/posts/:id", authMiddleware, validationMiddleware, PostController.update);
+app.patch("/posts/:id", authMiddleware, validationMiddleware,validations.postValidation, PostController.update);
 
 // Запрос на выгрузку файла
 app.post("/upload", authMiddleware, uploader.single("image"), PostController.upload);
