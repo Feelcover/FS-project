@@ -6,6 +6,7 @@ import validationMiddleware from "./utils/validationMiddleware.js";
 import { PostController, UserController } from "./controllers/index.js";
 import { validations } from "./validations/index.js"
 import cors from "cors"
+import { getTags } from "./controllers/PostController.js";
 
 
 mongoose
@@ -38,8 +39,13 @@ app.post("/auth/login", validations.loginValidation, validationMiddleware, UserC
 // Выполнение регистрации
 app.post("/auth/register", validations.registerValidation, validationMiddleware, UserController.register);
 
+
 // Запрос всех статей
 app.get("/posts", PostController.getAll);
+
+
+//Запрос тегов
+app.get("/tags", getTags);
 
 // Запрос статьи
 app.get("/posts/:id", PostController.getOne);

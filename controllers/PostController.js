@@ -124,3 +124,17 @@ export const upload = (req, res) => {
     });
   }
 };
+
+export const getTags = async (req, res) =>{
+  try {
+    const posts = await PostSchema.find().limit(5).exec();
+    const tags = posts.map(item => item.tags).flat().slice(0, 5);
+
+    res.json(tags)
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message:"Не удалось загрузить теги"
+    })
+  }
+}
