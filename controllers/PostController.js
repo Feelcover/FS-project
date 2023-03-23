@@ -37,7 +37,7 @@ export const getOne = (req, res) => {
     const postId = req.params.id;
     PostSchema.findOneAndUpdate(
       { _id: postId },
-      { $inc: { viewCount: 1 } },
+      { $inc: { viewsCount: 1 } },
       { returnDocument: "after" },
       (err, doc) => {
         if (err) {
