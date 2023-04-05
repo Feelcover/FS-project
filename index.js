@@ -4,10 +4,9 @@ import multer from "multer";
 import authMiddleware from "./utils/authMiddleware.js";
 import validationMiddleware from "./utils/validationMiddleware.js";
 import { PostController, UserController } from "./controllers/index.js";
-import { validations } from "./validations/index.js"
-import cors from "cors"
+import { validations } from "./validations/index.js";
+import cors from "cors";
 import { getTags } from "./controllers/PostController.js";
-
 
 mongoose
   .connect(
@@ -34,15 +33,23 @@ app.use(express.json());
 app.use("/upload", express.static("uploads"));
 
 // Выполнение авторизации
-app.post("/auth/login", validations.loginValidation, validationMiddleware, UserController.login);
+app.post(
+  "/auth/login",
+  validations.loginValidation,
+  validationMiddleware,
+  UserController.login
+);
 
 // Выполнение регистрации
-app.post("/auth/register", validations.registerValidation, validationMiddleware, UserController.register);
-
+app.post(
+  "/auth/register",
+  validations.registerValidation,
+  validationMiddleware,
+  UserController.register
+);
 
 // Запрос всех статей
 app.get("/posts", PostController.getAll);
-
 
 //Запрос тегов
 app.get("/tags", getTags);
@@ -68,10 +75,21 @@ app.post(
 app.delete("/posts/:id", authMiddleware, PostController.remove);
 
 // Запрос обновления статьи
-app.patch("/posts/:id", authMiddleware, validationMiddleware,validations.postValidation, PostController.update);
+app.patch(
+  "/posts/:id",
+  authMiddleware,
+  validationMiddleware,
+  validations.postValidation,
+  PostController.update
+);
 
 // Запрос на выгрузку файла
-app.post("/upload", authMiddleware, uploader.single("image"), PostController.upload);
+app.post(
+  "/upload",
+  authMiddleware,
+  uploader.single("image"),
+  PostController.upload
+);
 
 // Проверка порта
 app.listen(4444, (err) => {
