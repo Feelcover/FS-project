@@ -88,11 +88,11 @@ export const remove = (req, res) => {
     });
   }
 };
-export const update = (req, res) => {
+export const update = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    PostSchema.updateOne(
+    await PostSchema.updateOne(
       { _id: postId },
       {
         title: req.body.title,
