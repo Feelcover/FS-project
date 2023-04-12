@@ -21,8 +21,19 @@ export const create = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostSchema.find().populate("user").exec();
+    const posts = await PostSchema.find().sort({createdAt:-1}).populate("user").exec();
+    res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Не удалось найти статьи",
+    });
+  }
+};
 
+export const getAllByViews = async (req, res) => {
+  try {
+    const posts = await PostSchema.find().sort({viewsCount:-1}).populate("user").exec();
     res.json(posts);
   } catch (err) {
     console.log(err);

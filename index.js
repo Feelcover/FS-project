@@ -51,6 +51,9 @@ app.post(
 // Запрос всех статей
 app.get("/posts", PostController.getAll);
 
+// Запрос всех статей по дате обновления
+app.get("/posts/most-view", PostController.getAllByViews);
+
 //Запрос тегов
 app.get("/tags", getTags);
 
