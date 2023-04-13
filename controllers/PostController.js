@@ -21,7 +21,10 @@ export const create = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostSchema.find().sort({createdAt:-1}).populate("user").exec();
+    const posts = await PostSchema.find()
+      .sort({ createdAt: -1 })
+      .populate("user")
+      .exec();
     res.json(posts);
   } catch (err) {
     console.log(err);
@@ -33,7 +36,10 @@ export const getAll = async (req, res) => {
 
 export const getAllByViews = async (req, res) => {
   try {
-    const posts = await PostSchema.find().sort({viewsCount:-1}).populate("user").exec();
+    const posts = await PostSchema.find()
+      .sort({ viewsCount: -1 })
+      .populate("user")
+      .exec();
     res.json(posts);
   } catch (err) {
     console.log(err);
@@ -65,7 +71,7 @@ export const getOne = (req, res) => {
         }
         res.json(doc);
       }
-    ).populate('user');
+    ).populate("user");
   } catch (err) {
     console.log(err);
     res.status(500).json({
