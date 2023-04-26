@@ -1,5 +1,5 @@
 {
-  "name": "fs-project",
+  "name": "MERN FS-project by Andrey Chebanov",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -19,5 +19,9 @@
   "version": "1.0.0",
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Feelcover/FS-project-backend"
+  }
 }
