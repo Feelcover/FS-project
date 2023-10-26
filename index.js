@@ -8,10 +8,10 @@ import { validations } from "./validations/index.js";
 import cors from "cors";
 import { getTags } from "./controllers/PostController.js";
 
+// "mongodb+srv://pioneerbeat:Andrey@fs.h3wezc2.mongodb.net/blog?retryWrites=true&w=majority"
+  
 mongoose
-  .connect(
-    "mongodb+srv://pioneerbeat:Andrey@fs.h3wezc2.mongodb.net/blog?retryWrites=true&w=majority"
-  )
+  .connect(process.env.MONGODB)
   .then(() => console.log("DB connected"))
   .catch((err) => console.log("DB error", err));
 
@@ -98,7 +98,7 @@ app.post(
 );
 
 // Проверка порта
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
   if (err) {
     return console.log(err);
   }
